@@ -20,6 +20,9 @@ class MailTest extends TestCase {
                 body TEXT NOT NULL
             );
         ");
+
+        // Reset the sequence so IDs start at 1 for each test 
+        $this->pdo->exec("ALTER SEQUENCE mail_id_seq RESTART WITH 1;");
     }
 
     // To test create mail
@@ -76,7 +79,7 @@ class MailTest extends TestCase {
         $result = $mail->deleteMail($id);
         $this->assertTrue($result);
 
-        $deletedMail = $mail->getMail($id);
+        $deletedMail = $mail->getMailById($id);
         $this->assertCount(0, $deletedMail);
     }
 }
