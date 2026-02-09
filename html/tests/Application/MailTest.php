@@ -22,10 +22,61 @@ class MailTest extends TestCase {
         ");
     }
 
+    // To test create mail
     public function testCreateMail() {
         $mail = new Mail($this->pdo);
         $id = $mail->createMail("Alice", "Hello world");
         $this->assertIsInt($id);
         $this->assertEquals(1, $id);
+    }
+
+    // To test get all mails
+    public function testGetAllMails() {
+        $mail = new Mail($this->pdo);
+        $mail->createMail("Alice", "Hello! Good Morning.");
+        $mail->createMail("Rocky", "Hey there! How are you doing?");
+
+        $mails = $mail->getAllMails();
+        $this->assertCount(2, $mails);
+        $this->assertEquals("Alice", $mails[0]['subject']);
+        $this->assertEquals("Hello! Good Morning.", $mails[0]['body']);
+        $this->assertEquals("Rocky", $mails[1]['subject']);
+        $this->assertEquals("Hey there! How are you doing?", $mails[1]['body']);
+    }
+
+    // To test get mail by id
+    public function testGetMailById() {
+        $mail = new Mail($this->pdo);
+        $id = $mail->createMail("Harnish", "Have a great day!");
+
+        $returnedMail = $mail->getMailById($id);
+        $this->assertCount(1, $returnedMail);
+        $this->assertEquals("Harnish", $returnedMail[0]['subject']);
+        $this->assertEquals("Have a great day!", $returnedMail[0]['body']);
+    }
+
+    // To test update mail
+    public function testUpdateMail() {
+        $mail = new Mail($this->pdo);
+        $id = $mail->createMail("Danna", "Hello World");
+
+        $mail->updateMail($id, "John", "Welcome to the World!");
+
+        $returnedMail = $mail->getMailById($id);
+        $this->assertCount(1, $returnedMail);
+        $this->assertEquals("John", $returnedMail[0]['subject']);
+        $this->assertEquals("Welcome to the World!", $returnedMail[0]['body']);
+    }
+
+    // To test delet mail
+    public function testDeleteMail() {
+        $mail = new Mail($this->pdo);
+        $id = $mail->createMail("Trump", "Destroy the World");
+
+        $result = $mail->deleteMail($id);
+        $this->assertTrue($result);
+
+        $deletedMail = $mail->getMail($id);
+        $this->assertCount(0, $deletedMail);
     }
 }
