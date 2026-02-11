@@ -20,13 +20,13 @@ class Mail {
     }
 
     // To review all mails
-    public function getAllmails() : array {
+    public function getAllMails() : array {
         $sql = "SELECT * FROM mail ORDER BY id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute();
 
-        $mail = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $mail;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
     }
 
     // To review a mail with id
