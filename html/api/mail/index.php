@@ -18,12 +18,28 @@ try {
 $mail = new Mail($pdo);
 $page = new Page();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $json = file_get_contents("php://input");
-    $data = json_decode($json, true);
+// To get the url
+$uri = $_SERVER['REQUEST_URI'];
 
-    $page->item($mail->createMail($data['subject'], $data['body']));
-    exit;
-}
+// To get the method
+$method = $_SERVER['REQUEST_METHOD'];
 
-$page->badRequest();
+if ($uri === "/api/mail/") {
+    switch ($method) {
+        // GET all mails
+        case 'GET':
+            $page->list($mail->getAllMails());
+            break;
+
+        // Create a mail
+        case 'POST':
+            $json = file_get_contents("php://input");
+            $data = json_decode($json, true);
+            $page->itemCreate($mail->createMail($data['subject'], $data['body']));
+            break;
+            
+        // Default condition
+        default:
+            $page->notFound();
+    }
+};
