@@ -30,7 +30,7 @@ class Mail {
     }
 
     // To review a mail with id
-    public function getMailById($id) {
+    public function getMail($id) {
         $sql = "SELECT * FROM mail WHERE id=?";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$id]);
@@ -44,7 +44,7 @@ class Mail {
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$subject, $body, $id]);
 
-        $updatedMail = $this->getMailById($id);
+        $updatedMail = $this->getMail($id);
         return $updatedMail;
     }
 

@@ -30,7 +30,7 @@ if ($uri === "/api/mail/$id") {
     switch ($method) {
         // To get the mail by id
         case 'GET':
-            $page->item($mail->getMailById($id));
+            $page->item($mail->getMail($id));
             break;
 
         // To update the mail

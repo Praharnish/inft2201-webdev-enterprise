@@ -48,11 +48,11 @@ class MailTest extends TestCase {
     }
 
     // To test get mail by id
-    public function testGetMailById() {
+    public function testgetMail() {
         $mail = new Mail($this->pdo);
         $id = $mail->createMail("Harnish", "Have a great day!");
 
-        $returnedMail = $mail->getMailById($id);
+        $returnedMail = $mail->getMail($id);
         $this->assertCount(1, $returnedMail);
         $this->assertEquals("Harnish", $returnedMail[0]['subject']);
         $this->assertEquals("Have a great day!", $returnedMail[0]['body']);
@@ -65,7 +65,7 @@ class MailTest extends TestCase {
 
         $mail->updateMail($id, "John", "Welcome to the World!");
 
-        $returnedMail = $mail->getMailById($id);
+        $returnedMail = $mail->getMail($id);
         $this->assertCount(1, $returnedMail);
         $this->assertEquals("John", $returnedMail[0]['subject']);
         $this->assertEquals("Welcome to the World!", $returnedMail[0]['body']);
@@ -79,7 +79,7 @@ class MailTest extends TestCase {
         $result = $mail->deleteMail($id);
         $this->assertTrue($result);
 
-        $deletedMail = $mail->getMailById($id);
+        $deletedMail = $mail->getMail($id);
         $this->assertCount(0, $deletedMail);
     }
 }
