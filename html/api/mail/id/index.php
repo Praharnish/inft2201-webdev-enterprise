@@ -1,5 +1,5 @@
 <?php
-require '../../vendor/autoload.php';
+require '../../../vendor/autoload.php';
 
 use Application\Mail;
 use Application\Page;
@@ -37,7 +37,7 @@ if ($uri === "/api/mail/$id") {
         case 'PUT':
             $json = file_get_contents("php://input");
             $data = json_decode($json, true);
-            $page->item($mail->updateMail($data['subject'], $data['body']));
+            $page->item($mail->updateMail($id, $data['subject'], $data['body']));
             break;
 
         // To gelet the mail by id
