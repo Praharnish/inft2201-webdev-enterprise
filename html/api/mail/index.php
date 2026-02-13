@@ -1,3 +1,8 @@
+<!-- 
+Auther: Harnish Prajapati
+Purpose: Greating api for creating and getting all the mails.
+-->
+
 <?php
 require '../../vendor/autoload.php';
 
@@ -18,6 +23,7 @@ try {
 $mail = new Mail($pdo);
 $page = new Page();
 
+// Chatgpt
 // To get the url
 $uri = $_SERVER['REQUEST_URI'];
 

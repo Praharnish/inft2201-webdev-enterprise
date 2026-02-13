@@ -1,3 +1,9 @@
+<!-- 
+Auther: Harnish Prajapati
+Purpose: For crating the mail functions.
+Refrunce: Kushal Patel
+-->
+
 <?php
 namespace Application;
 
@@ -26,7 +32,6 @@ class Mail {
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-
     }
 
     // To review a mail with id

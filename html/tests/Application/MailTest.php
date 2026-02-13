@@ -1,3 +1,8 @@
+<!-- 
+Auther: Harnish Prajapati
+Purpose: For testing the mail functions. 
+-->
+
 <?php
 use PHPUnit\Framework\TestCase;
 use Application\Mail;
