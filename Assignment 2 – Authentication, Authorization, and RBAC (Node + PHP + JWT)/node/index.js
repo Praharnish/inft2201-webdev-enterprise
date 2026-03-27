@@ -2,7 +2,7 @@ import http from "http";
 import fs from "fs";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = "SET_A_RANDOM_STRING_FOR_FULL_MARKS";
+const JWT_SECRET = "HarnishPrajapati1234@";
 
 http
   .createServer((req, res) => {
@@ -16,27 +16,59 @@ http
     if (req.method === "POST") {
       if (req.url === "/login") {
         let body = "";
+
         req.on("data", (chunk) => {
           body += chunk;
         });
+
         req.on("end", () => {
           try {
             body = JSON.parse(body);
 
-            // handle a login attempt
+            const { username, password } = body;
 
-            // open up our "database" (actually a flat file called ./users.txt)
-            // to see if there is a username/password combination that matches
-            // body.username and body.password
+            // read users.txt
+            const users = fs.readFileSync("./users.txt", "utf-8").split("\n");
 
-            // return a 404 error if the username isn't found
-            res.writeHead(404, { "Content-Type": "text/plain" });
-            res.end(`${body.username} not found\n`);
+            let userFound = null;
 
-            // return a 401 error if the username is found but the password doesn't match
+            for (let line of users) {
+              if (!line.trim()) continue;
 
-            // on success, return an encoded userId and role using your JWT_SECRET.
-            // https://www.npmjs.com/package/jsonwebtoken
+              // IMPORTANT: correct order
+              const [userId, fileUsername, filePassword, role] = line.split(",");
+
+              if (username === fileUsername) {
+                userFound = { userId, filePassword, role };
+                break;
+              }
+            }
+
+            // user not found
+            if (!userFound) {
+              res.writeHead(404, { "Content-Type": "text/plain" });
+              return res.end(`${username} not found\n`);
+            }
+
+            // wrong password
+            if (password !== userFound.filePassword) {
+              res.writeHead(401, { "Content-Type": "text/plain" });
+              return res.end("Invalid password\n");
+            }
+
+            // success → create JWT
+            const token = jwt.sign(
+              {
+                userId: parseInt(userFound.userId),
+                role: userFound.role,
+              },
+              JWT_SECRET,
+              { expiresIn: "1h" }
+            );
+
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ token }));
+
           } catch (err) {
             console.log(err);
             res.writeHead(500, { "Content-Type": "text/plain" });
