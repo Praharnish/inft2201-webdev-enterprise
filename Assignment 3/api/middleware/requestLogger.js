@@ -1,13 +1,13 @@
 const { v4: uuidv4 } = require("uuid");
 
-// TODO: Implement request logging middleware.
-// Requirements:
-// - Generate a requestId (uuid).
-// - Attach it to req.requestId.
-// - Log method, path, and requestId to the console (or to a file if you prefer).
-// - Later, your error handler should re-use the same requestId in its output.
+// Adds a unique request ID so every incoming request can be traced in logs.
 
 module.exports = function requestLogger(req, res, next) {
-  // TODO: implement
+  // Create and store a request-scoped identifier for downstream middleware.
+  const requestId = uuidv4();
+  req.requestId = requestId;
+
+  // Log a compact, searchable line for request tracing.
+  console.log(`REQUEST ${requestId} ${req.method} ${req.originalUrl}`);
   next();
 };
