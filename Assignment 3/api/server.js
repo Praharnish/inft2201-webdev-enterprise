@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("./middleware/rateLimit");
 const requestLogger = require("./middleware/requestLogger");
 const errorHandler = require("./middleware/errorHandler");
 
@@ -10,15 +11,16 @@ const app = express();
 
 app.use(express.json());
 
-// Attach request logger early so all requests get an ID and log entry.
+// Middleware order matters: log and rate-limit every request before routing.
 app.use(requestLogger);
+app.use(rateLimit);
 
-// Mount routes
+// Mount the feature routes under their API prefixes.
 app.use("/status", statusRoutes);
 app.use("/auth", authRoutes);
 app.use("/mail", mailRoutes);
 
-// Centralized error handler LAST
+// Centralized error handler LAST so every failure returns one consistent format.
 app.use(errorHandler);
 
 const PORT = 3000;
