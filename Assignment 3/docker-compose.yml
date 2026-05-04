@@ -7,7 +7,7 @@ services:
       - "3000:3000"
     environment:
       # match keys in config/env.example
-      JWT_SECRET: "CHANGE_ME_BEFORE_SUBMISSION"
+      JWT_SECRET: "HPPrajapati"
       RATE_LIMIT_MAX: 5
       RATE_LIMIT_WINDOW_SECONDS: 60
     volumes:
